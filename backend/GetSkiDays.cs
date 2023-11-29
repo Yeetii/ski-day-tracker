@@ -19,13 +19,13 @@ namespace backend
         public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
         {
             string? token = req.Query["token"];
-            string? code = req.Query["code"];
+            string? authorizationCode = req.Query["authorizationCode"];
 
             if (token is null)
             {
-                if (code is not null)
+                if (authorizationCode is not null)
                 {
-                    token = await TokenExchange.GetToken(code);
+                    token = await TokenExchange.GetToken(authorizationCode);
                 }
                 else
                 {

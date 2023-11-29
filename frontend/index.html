@@ -49,7 +49,7 @@
             }, 1000);
 
             async function getSkiDays(code) {
-                const apiUrl = 'https://skidays.erikmagnusson.com/api/GetSkiDays?code=' + code;
+                const apiUrl = 'https://skidays.erikmagnusson.com/api/GetSkiDays?authorizationCode=' + code;
                 const response = await fetch(apiUrl, {
                         method: 'GET'
                 });
