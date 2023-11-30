@@ -1,6 +1,5 @@
 namespace  backend;
 
-// Root myDeserializedClass = JsonSerializer.Deserialize<List<Root>>(myJsonResponse);
 using System.Text.Json.Serialization;
 
 public record Athlete(
@@ -25,7 +24,7 @@ public record StravaModel(
     [property: JsonPropertyName("type")] string Type,
     [property: JsonPropertyName("sport_type")] string SportType,
     [property: JsonPropertyName("id")] object Id,
-    [property: JsonPropertyName("start_date")] DateTime? StartDate,
+    [property: JsonPropertyName("start_date")] DateTime StartDate,
     [property: JsonPropertyName("start_date_local")] DateTime? StartDateLocal,
     [property: JsonPropertyName("timezone")] string Timezone,
     [property: JsonPropertyName("utc_offset")] double? UtcOffset,

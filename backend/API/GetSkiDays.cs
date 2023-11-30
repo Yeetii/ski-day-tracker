@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using static backend.SkiDaysCalculator;
 
 namespace backend
 {
@@ -37,7 +38,25 @@ namespace backend
 
             var model = await GetStravaModel(token, seasonStart);
 
-            var skiDays = CalculateSkiDays(model);
+            if (model is null)
+            {
+                return req.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+
+            var activities = model.Select(activity => new Activity
+            {
+                Type = activity.Type switch
+                {
+                    "AlpineSki" => ActivityType.AlpineSkiing,
+                    "BackcountrySki" => ActivityType.BackcountrySkiing,
+                    "NordicSki" => ActivityType.NordicSkiing,
+                    "Snowboard" => ActivityType.Snowboarding,
+                    _ => ActivityType.Other,
+                },
+                Date = DateOnly.FromDateTime(activity.StartDate),
+            });
+
+            var skiDays = CalculateSkiDays(activities);
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
@@ -91,18 +110,6 @@ namespace backend
             }
 
             return activities;
-        }
-        
-
-        private static SkiDays CalculateSkiDays(IEnumerable<StravaModel> models)
-        {
-            return new SkiDays
-            {
-                AlpineSkiDays = models.Count(model => model.Type == SportTypes.ALPINE_SKIING),
-                BackcountrySkiDays = models.Count(model => model.Type == SportTypes.BACKCOUNTRY_SKIING),
-                NordicSkiDays = models.Count(model => model.Type == SportTypes.NORDIC_SKIING),
-                SnowboardDays = models.Count(model => model.Type == SportTypes.SNOWBOARDING),
-            };
         }
     }
 
