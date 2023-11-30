@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ski Days Leaderboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        #leaderboardTable {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 80em;
+            margin: 0 auto;
+        }
+
+        #leaderboardTable th {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ski Days Leaderboard</h1>
+
+    <table id="leaderboardTable">
+        <tr>
+            <th>Name</th>
+            <th>Alpine Ski Days</th>
+            <th>Backcountry Ski Days</th>
+            <th>Nordic Ski Days</th>
+            <th>Snowboard Days</th>
+        </tr>
+    </table>
+
+    <script>
+        // Make a request to the GetLeaderboard API
+        fetch('http://localhost:7071/api/GetLeaderboad', {
+                method: 'GET'
+        })
+            .then(response => response.json())
+            .then(data => {
+                data.sort((a, b) => b.SkiDays.AlpineSkiDays - a.SkiDays.AlpineSkiDays);
+                const leaderboard = document.getElementById('leaderboardTable')
+                document.createElement('table');
+
+                data.forEach(entry => {
+                    const tableRow = document.createElement('tr');
+                    tableRow.innerHTML = `
+                        <td>${entry.Firstname} ${entry.Lastname}</td>
+                        <td>${entry.SkiDays.AlpineSkiDays}</td>
+                        <td>${entry.SkiDays.BackcountrySkiDays}</td>
+                        <td>${entry.SkiDays.NordicSkiDays}</td>
+                        <td>${entry.SkiDays.SnowboardDays}</td>
+                    `;
+                    leaderboard.appendChild(tableRow);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+    
+</body>
+</html>
+

@@ -2,7 +2,7 @@ namespace  backend;
 
 using System.Text.Json.Serialization;
 
-public record Athlete(
+public record SummaryAthlete(
     [property: JsonPropertyName("id")] int? Id,
     [property: JsonPropertyName("resource_state")] int? ResourceState
 );
@@ -15,7 +15,7 @@ public record Map(
 
 public record StravaModel(
     [property: JsonPropertyName("resource_state")] int? ResourceState,
-    [property: JsonPropertyName("athlete")] Athlete Athlete,
+    [property: JsonPropertyName("athlete")] SummaryAthlete Athlete,
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("distance")] double? Distance,
     [property: JsonPropertyName("moving_time")] int? MovingTime,
