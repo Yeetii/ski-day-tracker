@@ -4,18 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ski Days Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        #skiDaysOutput {
+            font-family: Arial, sans-serif;;
+            margin: 0 auto;
+        }
+
+        button {
+            font-family: Arial, sans-serif;
+            font-size: 1.5em;
+            margin: 0 auto;
+            display: block;
+        }
+
+        a {
+            font-family: Arial, sans-serif;
+            font-size: 1.5em;
+            margin: 0 auto;
+            display: block;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <h1>Ski Days Counter</h1>
+    <a href="/leaderboard">Show leaderboard</a>
+    <br />
+    <br />
     <button id="authorizeBtn">Fetch Data from Strava</button>
 
     <br />
     <div id="skiDaysOutput"></div>
 
     <script>
+        const runningLocally = window.location.href.includes('localhost');
+        const frontEndUrl = runningLocally ? 'http://localhost:8000' : "https://skidays.erikmagnusson.com";
+        const apiBaseUrl = runningLocally ? 'http://localhost:7071/api/GetSkiDays' : "/api/GetSkiDays";
+
         document.getElementById('authorizeBtn').addEventListener('click', () => {
             const clientId = '117539';
-            const redirectUri = 'https://skidays.erikmagnusson.com';
+            
+            const redirectUri = frontEndUrl;
             const responseType = 'code';
             const scope = 'read,activity:read,activity:read_all';
 
@@ -38,7 +77,7 @@
             }, 1000);
 
             async function getSkiDays(code) {
-                const apiUrl = 'https://skidays.erikmagnusson.com/api/GetSkiDays?authorizationCode=' + code;
+                const apiUrl = apiBaseUrl + '?authorizationCode=' + code;
                 const response = await fetch(apiUrl, {
                         method: 'GET'
                 });
