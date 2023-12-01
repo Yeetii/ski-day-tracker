@@ -13,14 +13,14 @@ public record Map(
     [property: JsonPropertyName("resource_state")] int? ResourceState
 );
 
-public record StravaModel(
+public record StravaActivity(
     [property: JsonPropertyName("resource_state")] int? ResourceState,
     [property: JsonPropertyName("athlete")] SummaryAthlete Athlete,
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("distance")] double? Distance,
     [property: JsonPropertyName("moving_time")] int? MovingTime,
     [property: JsonPropertyName("elapsed_time")] int? ElapsedTime,
-    [property: JsonPropertyName("total_elevation_gain")] double? TotalElevationGain,
+    [property: JsonPropertyName("total_elevation_gain")] double TotalElevationGain,
     [property: JsonPropertyName("type")] string Type,
     [property: JsonPropertyName("sport_type")] string SportType,
     [property: JsonPropertyName("id")] object Id,

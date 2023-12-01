@@ -12,6 +12,13 @@ public static class SkiDaysCalculator
             .Select(activity => activity.Date).Distinct();
         var snowboardingDays = activities.Where(activity => activity.Type == ActivityType.Snowboarding)
             .Select(activity => activity.Date).Distinct();
+
+        var totalSkiDays = activities.Where(activity => activity.Type != ActivityType.Other)
+            .Select(activity => activity.Date).Distinct();
+
+        var backcountrySkiElevationGain = activities.Where(activity => activity.Type == ActivityType.BackcountrySkiing)
+            .Sum(activity => activity.ElevationGain);
+        
         
         return new SkiDays
         {
@@ -19,6 +26,8 @@ public static class SkiDaysCalculator
             BackcountrySkiDays = backcountrySkiDays.Count(),
             NordicSkiDays = nordicSkiDays.Count(),
             SnowboardDays = snowboardingDays.Count(),
+            TotalSkiDays = totalSkiDays.Count(),
+            BackcountrySkiElevationGain = backcountrySkiElevationGain
         };
     }
 }

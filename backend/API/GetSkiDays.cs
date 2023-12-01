@@ -62,7 +62,7 @@ namespace backend
             return response;
         }
 
-        private static IEnumerable<Activity> ParseActivities(IEnumerable<StravaModel>? stravaActivities)
+        private static IEnumerable<Activity> ParseActivities(IEnumerable<StravaActivity>? stravaActivities)
         {
             return stravaActivities.Select(activity => new Activity
             {
@@ -75,13 +75,14 @@ namespace backend
                     _ => ActivityType.Other,
                 },
                 Date = DateOnly.FromDateTime(activity.StartDate),
+                ElevationGain = activity.TotalElevationGain,
             });
         }
 
-        private async static Task<IEnumerable<StravaModel>?> GetStravaModel(string token, DateTime? after = null)
+        private async static Task<IEnumerable<StravaActivity>?> GetStravaModel(string token, DateTime? after = null)
         {
             var client = new HttpClient();
-            var activities = new List<StravaModel>();
+            var activities = new List<StravaActivity>();
             int page = 1;
             bool hasMorePages = true;
 
@@ -108,7 +109,7 @@ namespace backend
                 using var response = await client.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
-                var pageActivities = JsonSerializer.Deserialize<List<StravaModel>>(body);
+                var pageActivities = JsonSerializer.Deserialize<List<StravaActivity>>(body);
 
                 if (pageActivities != null)
                 {

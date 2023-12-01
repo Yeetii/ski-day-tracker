@@ -27,12 +27,12 @@
         #leaderboardTable {
             font-family: Arial, sans-serif;
             border-collapse: collapse;
-            width: 80em;
             margin: 0 auto;
         }
 
-        #leaderboardTable th {
+        #leaderboardTable th, td {
             text-align: left;
+            padding-right: 30px;
         }
 
         .sticky-link {
@@ -54,10 +54,12 @@
     <table id="leaderboardTable">
         <tr>
             <th>Name</th>
+            <th>Total Ski Days</th>
             <th>Alpine Ski Days</th>
             <th>Backcountry Ski Days</th>
             <th>Nordic Ski Days</th>
             <th>Snowboard Days</th>
+            <th>Backcountry Elevation Gain</th>
         </tr>
     </table>
 
@@ -71,7 +73,7 @@
         })
             .then(response => response.json())
             .then(data => {
-                data.sort((a, b) => b.SkiDays.AlpineSkiDays - a.SkiDays.AlpineSkiDays);
+                data.sort((a, b) => b.SkiDays.TotalSkiDays - a.SkiDays.TotalSkiDays);
                 const leaderboard = document.getElementById('leaderboardTable')
                 document.createElement('table');
 
@@ -79,10 +81,12 @@
                     const tableRow = document.createElement('tr');
                     tableRow.innerHTML = `
                         <td>${entry.Firstname} ${entry.Lastname}</td>
+                        <td>${entry.SkiDays.TotalSkiDays}</td>
                         <td>${entry.SkiDays.AlpineSkiDays}</td>
                         <td>${entry.SkiDays.BackcountrySkiDays}</td>
                         <td>${entry.SkiDays.NordicSkiDays}</td>
                         <td>${entry.SkiDays.SnowboardDays}</td>
+                        <td>${entry.SkiDays.BackcountrySkiElevationGain}m</td>
                     `;
                     leaderboard.appendChild(tableRow);
             })
