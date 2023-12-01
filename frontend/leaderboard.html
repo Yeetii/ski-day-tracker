@@ -64,8 +64,9 @@
     <a href="/" class="sticky-link">Update your data</a>
 
     <script>
-        // Make a request to the GetLeaderboard API
-        fetch('http://localhost:7071/api/GetLeaderboad', {
+        const runningLocally = window.location.href.includes('localhost');
+        const apiBaseUrl = runningLocally ? 'http://localhost:7071/api/GetLeaderboad' : "/api/GetLeaderboad";
+        fetch(apiBaseUrl, {
                 method: 'GET'
         })
             .then(response => response.json())
