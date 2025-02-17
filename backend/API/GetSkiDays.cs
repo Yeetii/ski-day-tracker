@@ -11,12 +11,15 @@ namespace backend
     {
         private readonly ILogger _logger;
         private readonly ICosmosClient _cosmosClient;
-        private readonly DateTime SeasonStart = new(2023, 07, 01);
+        private readonly DateTime SeasonStart;
 
         public GetSkiDays(ILoggerFactory loggerFactory, ICosmosClient cosmosClient)
         {
             _logger = loggerFactory.CreateLogger<GetSkiDays>();
             _cosmosClient = cosmosClient;
+            SeasonStart = DateTime.Now < new DateTime(DateTime.Now.Year, 07, 01)
+                ? new DateTime(DateTime.Now.Year - 1, 07, 01)
+                : new DateTime(DateTime.Now.Year, 07, 01);
         }
 
         [Function("GetSkiDays")]
@@ -52,7 +55,7 @@ namespace backend
 
             var athlete = new Athlete(stravaAthlete, skiDays);
 
-            await _cosmosClient.UpsertAthleteAsync(athlete);            
+            await _cosmosClient.UpsertAthleteAsync(athlete);
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
@@ -115,7 +118,7 @@ namespace backend
                 {
                     activities.AddRange(pageActivities);
                     page++;
-                } 
+                }
                 if (pageActivities?.Count < 200)
                 {
                     hasMorePages = false;
